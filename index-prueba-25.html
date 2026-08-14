@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Una pequeña sorpresa</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:#fff;color:#172033;font-family:Georgia,"Times New Roman",serif;display:flex;justify-content:center;align-items:center}
+.card{width:min(94vw,520px);min-height:92vh;padding:28px 22px;display:flex;align-items:center;justify-content:center;text-align:center}
+.screen{display:none;width:100%;animation:fade .45s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.eyebrow{font:11px Arial,sans-serif;letter-spacing:3px;text-transform:uppercase;color:#718096}
+h1{font-size:clamp(31px,8vw,47px);margin:10px 0;color:#172033}
+p{font-size:18px;line-height:1.55}
+input{width:100%;max-width:320px;padding:15px;border:1px solid #dfe5ed;border-radius:14px;text-align:center;font-size:17px;outline:none}
+input:focus{border-color:#7b9bc1}
+.btn{border:0;background:#fff;cursor:pointer;width:72px;height:72px;border-radius:50%;font-size:34px;box-shadow:0 7px 25px #14233c22;border:1px solid #edf0f5;transition:.18s}
+.btn:active{transform:scale(.9)}
+.hint{font:13px Arial,sans-serif;color:#8b95a6;margin-top:9px}
+.photo{width:min(88vw,420px);margin:20px auto;padding:8px;border:1px solid #e8edf3;border-radius:22px;box-shadow:0 12px 35px #1928411f}
+.photo img{width:100%;display:block;border-radius:16px}
+.error{height:24px;color:#a84b5b;font:13px Arial,sans-serif;margin-top:8px}
+.timer{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:25px 0}
+.time-box{background:#f7f9fc;border-radius:15px;padding:14px 4px;border:1px solid #edf0f5}
+.number{display:block;font:700 clamp(27px,7vw,40px) Arial,sans-serif;color:#1d4778}
+.unit{font:10px Arial,sans-serif;letter-spacing:1px;color:#7c8798;text-transform:uppercase}
+.quote{margin:22px auto;padding:18px 16px;background:#fafbfc;border-radius:18px;max-width:420px;color:#4c5668}
+.heart{display:none}
+
+.locked{margin:22px auto;padding:20px 17px;background:#fafbfc;border-radius:18px;max-width:420px;color:#4c5668}
+.small{font:13px Arial,sans-serif;color:#8b95a6;line-height:1.5}
+#confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:20}
+.confetti-piece{position:absolute;width:9px;height:14px;animation:fall 3.5s linear forwards}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:0}}
+audio{width:min(100%,360px);margin-top:12px}
+.audio-intro{font-size:17px;color:#1d4778;margin:20px 0 8px}
+.closing{display:none;max-width:390px;margin:28px auto 0;color:#172033;font-size:18px;line-height:1.65;animation:closingIn .9s ease}
+.closing.show{display:block}
+@keyframes closingIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.gift-button{display:inline-flex;align-items:center;justify-content:center;border:1px solid #dfe5ed;background:#fff;color:#1d4778;border-radius:999px;padding:13px 22px;font:14px Arial,sans-serif;cursor:pointer;box-shadow:0 7px 25px #14233c12}
+.gift-button:active{transform:scale(.98)}
+.test-note{font:11px Arial,sans-serif;color:#9aa4b2;margin-top:12px}
+</style>
+</head>
+<body>
+<div id="confetti"></div>
+
+<main class="card">
+
+<section class="screen active" id="s0">
+<div class="eyebrow">Una pequeña sorpresa</div>
+<h1>Solo para ti</h1>
+<p>Hay una fecha que significa mucho para nosotros...</p>
+<input id="key" type="date" aria-label="Fecha secreta">
+<div class="error" id="err"></div>
+<button class="gift-button" onclick="unlock()">Continuar</button>
+</section>
+
+<section class="screen" id="s1">
+<div class="eyebrow">Antes de empezar</div>
+<h1>Antes de que cumplas 27...</h1>
+<div class="photo">
+  <img src="foto-pequeno.jpg" alt="Una foto de él cuando era pequeño"
+       onerror="this.style.display='none';">
+</div>
+<p>Quería empezar por aquí...<br>por el niño que algún día se convertiría en el hombre que amo.</p>
+<button class="gift-button" onclick="next()">Continuar</button>
+</section>
+
+<section class="screen" id="s2">
+<div class="eyebrow">Un paso más</div>
+<h1>Enciende una velita</h1>
+<p>Cada una representa un poquito de todo lo que falta para llegar a tu día.</p>
+<button class="gift-button" onclick="next()">Continuar</button>
+</section>
+
+<section class="screen" id="s3">
+<div class="eyebrow">Cuenta regresiva</div>
+<h1>Tu cumpleaños está cada vez más cerca</h1>
+<div class="timer">
+<div class="time-box"><span class="number" id="d">00</span><span class="unit">días</span></div>
+<div class="time-box"><span class="number" id="h">00</span><span class="unit">horas</span></div>
+<div class="time-box"><span class="number" id="m">00</span><span class="unit">minutos</span></div>
+<div class="time-box"><span class="number" id="s">00</span><span class="unit">segundos</span></div>
+</div>
+<p>Quiero que disfrutes cada segundo antes de que llegue tu día.</p>
+<button class="gift-button" onclick="next()">Continuar</button>
+</section>
+
+<section class="screen" id="s4">
+<div class="eyebrow">Una última cosa</div>
+<h1>El tiempo pasa...</h1>
+<div class="quote">Pero hay algo que no cambia, lo mucho que te amo mi amor y lo feliz que me hace compartir mi vida contigo.</div>
+
+<div class="locked">
+  <strong id="giftTitle">Abre tu regalo</strong>
+  <p id="dailyPhrase" style="margin:12px 0"></p>
+  <p class="small" id="lockedText">No me olvides venir cada día para ver qué te espera. El mejor día todavía está por llegar.</p>
+  <button id="giftButton" class="gift-button" onclick="openGift()">Abrir</button>
+  <div id="testNote" class="test-note"></div>
+</div>
+</section>
+
+<section class="screen" id="s5">
+<div class="eyebrow">25 de agosto</div>
+<div class="photo">
+  <img src="foto-pequeno.jpg" alt="Una foto especial" onerror="this.style.display='none';">
+</div>
+<h1>¡Feliz cumpleaños, mi amor!</h1>
+
+<p class="audio-intro">Tengo algo que decirte...</p>
+<audio id="birthdayAudio" controls preload="metadata">
+  <source src="cumpleanos.mp3" type="audio/mpeg">
+  Tu navegador no puede reproducir este audio.
+</audio>
+
+<p id="closingMessage" class="closing">
+  Y si después de todo esto todavía no te quedó claro... sí, panzón, te amo muchísimo.
+</p>
+</section>
+
+</main>
+
+<script>
+/*
+  MODO DE PRUEBA TEMPORAL
+
+  Para probar hoy como si fuera 25 de agosto:
+  https://TU-USUARIO.github.io/Cumple_mi_hombre/?prueba=25
+
+  Para volver a la versión bloqueada:
+  abre la misma página sin ?prueba=25
+*/
+
+const TEST_MODE = true; // VERSION DE PRUEBA: siempre se comporta como 25 de agosto
+const SECRET_DATE = "2025-04-23";
+
+// Fecha real de desbloqueo.
+// Se interpreta en horario de Ciudad de México.
+const BIRTHDAY = new Date("2026-08-25T00:00:00-06:00");
+
+const DAILY_MESSAGES = [
+  "Mi panzón, eres todo lo que busco y muchísimo más.",
+  "Mi amor hermoso, precioso, cada día me haces sentir más afortunada de tenerte.",
+  "Por si hoy se te olvida: te amo muchísimo y me encanta compartir mi vida contigo.",
+  "Mi panzón, no sabes lo feliz que me hace saber que eres tú con quien quiero compartir mi vida.",
+  "Eres todo lo que busco, todo lo que quiero y una de las partes más bonitas de mi vida.",
+  "Solo paso a recordarte que eres mi persona favorita y que te amo más de lo que a veces sé explicar.",
+  "Mi amor, espero que nunca dudes de lo importante que eres para mí.",
+  "Cada día falta menos para celebrarte, pero yo ya estoy emocionada por consentir a mi panzón.",
+  "Me encanta tenerte en mi vida, poder llamarte mi amor y saber que todavía nos quedan muchísimas cosas por vivir.",
+  "Mi panzón precioso, gracias por hacerme tan feliz simplemente siendo tú.",
+  "Si pudiera elegir otra vez, volvería a elegirte a ti. Sin pensarlo.",
+  "Ya casi llega tu día, mi amor. Mientras tanto, recuerda que eres todo lo que busco.",
+  "Te amo por todo lo que eres, por lo que somos y por todo lo que todavía nos falta vivir juntos."
+];
+
+let current = 0;
+const screens = document.querySelectorAll(".screen");
+
+function show(i) {
+  screens.forEach(s => s.classList.remove("active"));
+  screens[i].classList.add("active");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  current = i;
+}
+
+function next() {
+  if (current < screens.length - 1) show(current + 1);
+}
+
+function unlock() {
+  const entered = document.getElementById("key").value;
+  const err = document.getElementById("err");
+
+  if (entered === SECRET_DATE) {
+    err.textContent = "";
+    show(1);
+  } else {
+    err.textContent = "Esa no es la fecha secreta.";
+  }
+}
+
+function unlocked() {
+  return TEST_MODE || new Date() >= BIRTHDAY;
+}
+
+function getDailyPhrase() {
+  if (TEST_MODE) {
+    return "Modo de prueba activado. Hoy puedes abrir tu regalo.";
+  }
+
+  const now = new Date();
+  const daysLeft = Math.ceil((BIRTHDAY - now) / 86400000);
+
+  if (daysLeft <= 0) {
+    return "Por fin llegó tu día, mi amor.";
+  }
+
+  const index = Math.min(DAILY_MESSAGES.length - 1, Math.max(0, daysLeft - 1));
+  return DAILY_MESSAGES[index];
+}
+
+function updateGift() {
+  const button = document.getElementById("giftButton");
+  const text = document.getElementById("lockedText");
+  const phrase = document.getElementById("dailyPhrase");
+  const testNote = document.getElementById("testNote");
+
+  phrase.textContent = getDailyPhrase();
+
+  if (unlocked()) {
+    button.textContent = "Abrir";
+    text.textContent = TEST_MODE
+      ? "Esta es una prueba temporal. El regalo está desbloqueado."
+      : "Hoy sí puedes abrirlo.";
+    testNote.textContent = TEST_MODE ? "PRUEBA VISUAL — regalo desbloqueado" : "";
+  } else {
+    button.textContent = "Todavía no";
+    text.textContent =
+      "No me olvides venir cada día para ver qué te espera. El mejor día todavía está por llegar.";
+    testNote.textContent = "";
+  }
+}
+
+function confetti() {
+  const container = document.getElementById("confetti");
+  container.innerHTML = "";
+
+  const colors = ["#19324d", "#6f8faa", "#b9c9d6", "#dfe7ed"];
+
+  for (let i = 0; i < 90; i++) {
+    const piece = document.createElement("span");
+    piece.className = "confetti-piece";
+    piece.style.left = Math.random() * 100 + "vw";
+    piece.style.top = "-20px";
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = (2.2 + Math.random() * 2) + "s";
+    piece.style.animationDelay = Math.random() * 0.25 + "s";
+    piece.style.transform = "rotate(" + Math.random() * 360 + "deg)";
+    container.appendChild(piece);
+  }
+
+  setTimeout(() => container.innerHTML = "", 5000);
+}
+
+function openGift() {
+  if (!unlocked()) {
+    const text = document.getElementById("lockedText");
+    text.animate(
+      [
+        { opacity: 1 },
+        { opacity: 0.35 },
+        { opacity: 1 }
+      ],
+      { duration: 500 }
+    );
+    return;
+  }
+
+  confetti();
+  show(5);
+
+  // El mensaje final empieza siempre oculto.
+  document.getElementById("closingMessage").classList.remove("show");
+  document.getElementById("birthdayAudio").currentTime = 0;
+}
+
+document.getElementById("birthdayAudio").addEventListener("ended", function() {
+  document.getElementById("closingMessage").classList.add("show");
+});
+
+function updateCountdown() {
+  let difference = BIRTHDAY - new Date();
+
+  if (TEST_MODE) difference = 0;
+  if (difference < 0) difference = 0;
+
+  const total = Math.floor(difference / 1000);
+
+  document.getElementById("d").textContent = String(Math.floor(total / 86400)).padStart(2, "0");
+  document.getElementById("h").textContent = String(Math.floor((total % 86400) / 3600)).padStart(2, "0");
+  document.getElementById("m").textContent = String(Math.floor((total % 3600) / 60)).padStart(2, "0");
+  document.getElementById("s").textContent = String(total % 60).padStart(2, "0");
+}
+
+updateGift();
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+setInterval(updateGift, 60000);
+</script>
+</body>
+</html>
